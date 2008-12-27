@@ -19,6 +19,9 @@ handlers:
   static_dir: static
   expiration : "1d"
   
+- url: /admin/.*
+  script: admin.py
+  login: admin
 
 - url: .*
   script: main.py
