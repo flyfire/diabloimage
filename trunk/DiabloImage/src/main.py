@@ -19,6 +19,9 @@ class PublicPage(webapp.RequestHandler):
     def is_admin(self):
         return users.is_current_user_admin()
     
+    def head(self, *args):
+        return self.get(*args) 
+    
 class MainPage(PublicPage):
     def get(self,page):
         index=0 if page=="" else int(page)
@@ -52,7 +55,7 @@ def main():
                                         (r'/(?P<size>image)/(?P<id>[0-9]+)/?',GetImage),
                                         (r'/(?P<size>s)/(?P<id>[0-9]+)/?',GetImage),
                                         (r'/show/(?P<id>[0-9]+)/',ShowImage),
-                                        (r'/.*',Error)
+                                        ('.*',Error)
                                        ], debug=True)
     wsgiref.handlers.CGIHandler().run(application)
 
