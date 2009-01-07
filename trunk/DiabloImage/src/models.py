@@ -21,11 +21,11 @@ class Images(db.Model):
         key=str(self.key().id())+"image"
         memcache.delete(key)
         super(Images,self).delete()
-
         
     @property
-    def imgname(self):
-        return "%s/" %(self.key().id())
+    def id(self):
+        return str(self.key().id())
+    
     @property
     def imgurl(self):
         return "http://%s/image/%s/" %(os.environ['HTTP_HOST'],self.key().id())

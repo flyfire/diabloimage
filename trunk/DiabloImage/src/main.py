@@ -6,15 +6,19 @@ from google.appengine.ext.webapp import template
 from google.appengine.api import users
 import methods
 import logging
+def format_date(dt):
+    return dt.strftime('%a, %d %b %Y %H:%M:%S GMT')
+
 class PublicPage(webapp.RequestHandler):
     def render(self, template_file, template_value):
         path = os.path.join(os.path.dirname(__file__), template_file)
         self.response.out.write(template.render(path, template_value))
     
     def error(self,code):
-        if code>0:
+        if code==400:
             self.response.set_status(code)
-            self.response.out.write("出错啦!!!")
+        else:
+            self.response.set_status(code)
             
     def is_admin(self):
         return users.is_current_user_admin()
@@ -36,13 +40,21 @@ class ShowImage(PublicPage):
         if not image:return self.error(404)
         template_value={"image":image,"admin":self.is_admin()}
         self.render('views/show.html', template_value)
-        
+    
+    
 class GetImage(PublicPage):
     def get(self,size,id):
+        dic=self.request.headers
+        key=dic.get("If-None-Match")
+        self.response.headers['ETag']=size+id
+        if key and key==size+id:
+            return self.error(304)
         image=methods.downImage(id, size)
         if not image:
             return self.error(404)
         self.response.headers['Content-Type'] = str(image.mime) 
+        self.response.headers['Cache-Control']="max-age=315360000"
+        self.response.headers['Last-Modified']=format_date(image.created_at)
         self.response.out.write(image.bf)
 
 class Error(PublicPage):

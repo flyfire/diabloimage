@@ -12,6 +12,15 @@ def addImage(mime,description,bf):
     image.put()
     return image
 
+def addImage2(bf):
+    image=Images(bf=bf)
+    image.size=len(bf)
+    image.filetype,image.width,image.height=getImageInfo(bf)
+    if not image.filetype:return None
+    image.mime=image.filetype
+    image.put()
+    return image
+
 def getImage(id):
     id=int(id)
     return Images.get_by_id(id)
