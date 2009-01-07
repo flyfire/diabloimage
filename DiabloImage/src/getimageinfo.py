@@ -14,7 +14,7 @@ def getImageInfo(data):
     # handle GIFs
     if (size >= 10) and data[:6] in ('GIF87a', 'GIF89a'):
         # Check to see if content_type is correct
-        content_type = 'gif'
+        content_type = 'image/gif'
         w, h = struct.unpack("<HH", data[6:10])
         width = int(w)
         height = int(h)
@@ -24,7 +24,7 @@ def getImageInfo(data):
     # and finally the 4-byte width, height
     elif ((size >= 24) and data.startswith('\211PNG\r\n\032\n')
           and (data[12:16] == 'IHDR')):
-        content_type = 'png'
+        content_type = 'image/png'
         w, h = struct.unpack(">LL", data[16:24])
         width = int(w)
         height = int(h)
@@ -32,14 +32,14 @@ def getImageInfo(data):
     # Maybe this is for an older PNG version.
     elif (size >= 16) and data.startswith('\211PNG\r\n\032\n'):
         # Check to see if we have the right content type
-        content_type = 'png'
+        content_type = 'image/png'
         w, h = struct.unpack(">LL", data[8:16])
         width = int(w)
         height = int(h)
 
     # handle JPEGs
     elif (size >= 2) and data.startswith('\377\330'):
-        content_type = 'jpeg'
+        content_type = 'image/jpeg'
         jpeg = StringIO.StringIO(data)
         jpeg.read(2)
         b = jpeg.read(1)

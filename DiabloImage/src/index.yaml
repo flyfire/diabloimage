@@ -10,7 +10,7 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 165 times in query history.
+# Used 31 times in query history.
 - kind: Images
   properties:
   - name: created_at
