@@ -10,6 +10,7 @@ function fileDialogComplete(numFilesSelected, numFilesQueued) {
 	try {
 		if (numFilesQueued > 0) {
 			document.getElementById("showResult").innerHTML=numFilesQueued+" Images Selected ";
+			this.startUpload();
 		}
 	} catch (ex) {
 		this.debug(ex);
